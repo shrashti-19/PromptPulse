@@ -35,4 +35,47 @@ const signup = async (req, res) => {
   }
 };
 
-module.exports = { signup };
+const jwt = require("jsonwebtoken");
+
+const jwt = require("jsonwebtoken");
+
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // 1. Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
+    }
+
+    // 2. Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // 3. Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // 4. Generate JWT
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    // 5. Send token
+    res.status(200).json({
+      message: "Login successful",
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Login failed" });
+  }
+};
+
+
+module.exports = { signup,login };
