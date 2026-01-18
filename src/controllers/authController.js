@@ -37,7 +37,6 @@ const signup = async (req, res) => {
 
 const jwt = require("jsonwebtoken");
 
-const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
   try {
