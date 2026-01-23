@@ -1,5 +1,6 @@
 const express = require("express");
 const authRoutes = require("./routes/authRoute");
+const testRoutes = requre("./routes/testRoutes");
 const app = express();
 
 app.use(express.json());
@@ -7,4 +8,6 @@ app.use(express.json());
 
 //auth route for signuo
 app.use("/api/auth", authRoutes);
+app.use("/api/test", testRoutes);
+
 module.exports = app;
