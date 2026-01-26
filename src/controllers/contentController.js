@@ -30,7 +30,7 @@ const createContent = async (req, res) => {
 const getMyContent = async (req, res) => {
   try {
     const content = await Content.find({
-      userId: req.user.userId,
+      userId: req.user.userId, //ownership enforced 
       isDeleted: false,
     }).sort({ createdAt: -1 });
 
