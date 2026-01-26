@@ -27,4 +27,18 @@ const createContent = async (req, res) => {
   }
 };
 
-module.exports = { createContent };
+const getMyContent = async (req, res) => {
+  try {
+    const content = await Content.find({
+      userId: req.user.userId,
+      isDeleted: false,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json(content);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch content" });
+  }
+};
+
+
+module.exports = { createContent, getMyContent };
