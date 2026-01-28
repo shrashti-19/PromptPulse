@@ -1,5 +1,5 @@
 const express = require("express");
-const { createContent, getMyContent } = require("../controllers/contentController");
+const { createContent, getMyContent, softDeleteContent} = require("../controllers/contentController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -11,5 +11,7 @@ router.post("/", authMiddleware, createContent);
 router.get("/", authMiddleware, getMyContent);
 //returns only logged in user's content
 
+//soft delete content
+router.delete("/:id", authMiddleware, softDeleteContent);
 
 module.exports = router;
