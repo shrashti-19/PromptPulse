@@ -47,7 +47,10 @@ const softDeleteContent = async (req, res) => {
 
     const content = await Content.findOneAndUpdate(
       { _id: id, userId: req.user.userId },
-      { isDeleted: true },
+      { 
+        isDeleted: true,
+        deletedAt : new Date(),
+      },
       { new: true }
     );
 
