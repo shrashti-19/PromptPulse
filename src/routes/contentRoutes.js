@@ -1,5 +1,5 @@
 const express = require("express");
-const { createContent, getMyContent, softDeleteContent} = require("../controllers/contentController");
+const { createContent, getMyContent, softDeleteContent, updateContent} = require("../controllers/contentController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -13,5 +13,9 @@ router.get("/", authMiddleware, getMyContent);
 
 //soft delete content
 router.delete("/:id", authMiddleware, softDeleteContent);
+
+
+//update content
+router.put("/:id" , authMiddleware, updateContent);
 
 module.exports = router;
