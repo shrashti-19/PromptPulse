@@ -64,5 +64,31 @@ const softDeleteContent = async (req, res) => {
   }
 };
 
+//updating the content
+const updateContent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, body, type } = req.body;
 
-module.exports = { createContent, getMyContent, softDeleteContent };
+    const content = await Content.findOneAndUpdate(
+      { _id: id, userId: req.user.userId, isDeleted: false },
+      { title, body, type },
+      { new: true }
+    );
+
+    if (!content) {
+      return res.status(404).json({ message: "Content not found" });
+    }
+
+    res.status(200).json({
+      message: "Content updated successfully",
+      content,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Update failed" });
+  }
+};
+
+
+
+module.exports = { createContent, getMyContent, softDeleteContent, updateContent};
