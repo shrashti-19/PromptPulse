@@ -27,12 +27,40 @@ const createContent = async (req, res) => {
   }
 };
 
+// const getMyContent = async (req, res) => {
+//   try {
+//     const content = await Content.find({
+//       userId: req.user.userId, //ownership enforced 
+//       isDeleted: false,
+//     }).sort({ createdAt: -1 });
+
+//     res.status(200).json(content);
+//   } catch (error) {
+//     res.status(500).json({ message: "Failed to fetch content" });
+//   }
+// };
+
 const getMyContent = async (req, res) => {
   try {
-    const content = await Content.find({
-      userId: req.user.userId, //ownership enforced 
+    const { search, type } = req.query;
+
+    let query = {
+      userId: req.user.userId,
       isDeleted: false,
-    }).sort({ createdAt: -1 });
+    };
+
+    if (type) {
+      query.type = type;
+    }
+
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { body: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const content = await Content.find(query).sort({ createdAt: -1 });
 
     res.status(200).json(content);
   } catch (error) {
