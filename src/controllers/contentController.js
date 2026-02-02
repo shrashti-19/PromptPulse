@@ -40,9 +40,39 @@ const createContent = async (req, res) => {
 //   }
 // };
 
+// const getMyContent = async (req, res) => {
+//   try {
+//     const { search, type } = req.query;
+
+//     let query = {
+//       userId: req.user.userId,
+//       isDeleted: false,
+//     };
+
+//     if (type) {
+//       query.type = type;
+//     }
+
+//     if (search) {
+//       query.$or = [
+//         { title: { $regex: search, $options: "i" } },
+//         { body: { $regex: search, $options: "i" } },
+//       ];
+//     }
+
+//     const content = await Content.find(query).sort({ createdAt: -1 });
+
+//     res.status(200).json(content);
+//   } catch (error) {
+//     res.status(500).json({ message: "Failed to fetch content" });
+//   }
+// };
+
+
+//pagination
 const getMyContent = async (req, res) => {
   try {
-    const { search, type } = req.query;
+    const { search, type, page = 1, limit = 10 } = req.query;
 
     let query = {
       userId: req.user.userId,
@@ -60,7 +90,12 @@ const getMyContent = async (req, res) => {
       ];
     }
 
-    const content = await Content.find(query).sort({ createdAt: -1 });
+    const skip = (page - 1) * limit;
+
+    const content = await Content.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
 
     res.status(200).json(content);
   } catch (error) {
