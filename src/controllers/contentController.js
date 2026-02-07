@@ -70,7 +70,7 @@ const createContent = async (req, res) => {
 
 
 //pagination
-const getMyContent = async (req, res) => {
+const getMyContent = async (req, res, next) => {
   try {
     const { search, type, page = 1, limit = 10 } = req.query;
 
@@ -99,7 +99,7 @@ const getMyContent = async (req, res) => {
 
     res.status(200).json(content);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch content" });
+    next(error);
   }
 };
 
