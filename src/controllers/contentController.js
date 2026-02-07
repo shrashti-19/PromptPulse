@@ -128,7 +128,7 @@ const softDeleteContent = async (req, res) => {
 };
 
 //updating the content
-const updateContent = async (req, res) => {
+const updateContent = async (req, res,next) => {
   try {
     const { id } = req.params;
     const { title, body, type } = req.body;
@@ -148,7 +148,7 @@ const updateContent = async (req, res) => {
       content,
     });
   } catch (error) {
-    res.status(500).json({ message: "Update failed" });
+    next(error);
   }
 };
 
