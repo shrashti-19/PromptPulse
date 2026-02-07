@@ -1,6 +1,6 @@
 const Content = require("../models/Content");
 
-const createContent = async (req, res) => {
+const createContent = async (req, res, next) => {
   try {
     const { title, body, type } = req.body;
 
@@ -23,7 +23,7 @@ const createContent = async (req, res) => {
       contentId: content._id,
     });
   } catch (error) {
-    res.status(500).json({ message: "Failed to create content" });
+    next(error);
   }
 };
 
@@ -104,7 +104,7 @@ const getMyContent = async (req, res, next) => {
 };
 
 //soft delete
-const softDeleteContent = async (req, res) => {
+const softDeleteContent = async (req, res,next) => {
   try {
     const { id } = req.params;
 
@@ -123,7 +123,7 @@ const softDeleteContent = async (req, res) => {
 
     res.status(200).json({ message: "Content deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Delete failed" });
+    next(error);
   }
 };
 
