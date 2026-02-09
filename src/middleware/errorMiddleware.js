@@ -1,5 +1,6 @@
 const errorMiddleware = (err, req, res, next) => {
-  console.error(err); // log for debugging
+  console.error(`[ERROR] ${err.message}`);
+ // log for debugging
 
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
