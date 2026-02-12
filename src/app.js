@@ -4,6 +4,7 @@ const testRoutes = require("./routes/testRoutes");
 const contentRoutes = require("./routes/contentRoutes");
 const errorMiddleware  = require("./middleware/errorMiddleware");
 const morgan = require("morgan");
+const aiRoutes = require("./routes/airRoutes");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(morgan("dev"));
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api/content", contentRoutes);
+app.use("/api/ai", aiRoutes);
 
 app.use(errorMiddleware);
 
