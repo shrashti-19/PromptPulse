@@ -1,0 +1,37 @@
+const Content = require("../models/Content");
+
+const summarizeContent = async (req, res, next) => {
+  try {
+    const { contentId } = req.params;
+
+    // 1️⃣ Fetch content with ownership check
+    const content = await Content.findOne({
+      _id: contentId,
+      userId: req.user.userId,
+      isDeleted: false,
+    });
+
+    if (!content) {
+      const error = new Error("Content not found");
+      error.statusCode = 404;
+      return next(error);
+    }
+
+    // 2️⃣ Mock AI summary (temporary)
+    const summary = `Summary:
+This content discusses "${content.title}".
+It highlights key ideas and provides structured insights.
+(Mock AI response for development.)`;
+
+    // 3️⃣ Return structured response
+    res.status(200).json({
+      success: true,
+      summary,
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { summarizeContent };
