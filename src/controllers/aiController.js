@@ -1,4 +1,6 @@
 const Content = require("../models/Content");
+const {generateMockSummary } = require("../services/aiService");
+
 
 const summarizeContent = async (req, res, next) => {
   try {
@@ -18,10 +20,7 @@ const summarizeContent = async (req, res, next) => {
     }
 
     // 2️⃣ Mock AI summary (temporary)
-    const summary = `Summary:
-This content discusses "${content.title}".
-It highlights key ideas and provides structured insights.
-(Mock AI response for development.)`;
+    const summary = generateMockSummary(content);
 
     // 3️⃣ Return structured response
     res.status(200).json({
