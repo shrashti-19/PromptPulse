@@ -84,5 +84,36 @@ const login = async (req, res) => {
   }
 };
 
+const refreshAccessToken = (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
 
-module.exports = { signup,login };
+    if (!refreshToken) {
+      const error = new Error("Refresh token required");
+      error.statusCode = 401;
+      return next(error);
+    }
+
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    const newAccessToken = jwt.sign(
+      { userId: decoded.userId },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.status(200).json({
+      success: true,
+      accessToken: newAccessToken,
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+module.exports = { signup,login, refreshAccessToken };
