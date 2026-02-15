@@ -72,6 +72,9 @@ const login = async (req, res) => {
     { expiresIn: "7d" }
     );
 
+    user.refreshToken = refreshToken;
+    await user.save();
+
     //5. Send response
     res.status(200).json({
      success: true,
