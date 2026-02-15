@@ -87,7 +87,7 @@ const login = async (req, res) => {
   }
 };
 
-const refreshAccessToken = (req, res, next) => {
+const refreshAccessToken = async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
 
@@ -102,6 +102,16 @@ const refreshAccessToken = (req, res, next) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
+    // 2️⃣ Find user in DB
+    const user = await User.findById(decoded.userId);
+
+    if (!user || user.refreshToken !== refreshToken) {
+      const error = new Error("Invalid refresh token");
+      error.statusCode = 403;
+      return next(error);
+    }
+
+    //3 
     const newAccessToken = jwt.sign(
       { userId: decoded.userId },
       process.env.ACCESS_TOKEN_SECRET,
