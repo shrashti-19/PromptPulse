@@ -128,5 +128,43 @@ const refreshAccessToken = async (req, res, next) => {
   }
 };
 
+const logout = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
 
-module.exports = { signup,login, refreshAccessToken };
+    if (!refreshToken) {
+      const error = new Error("Refresh token required");
+      error.statusCode = 400;
+      return next(error);
+    }
+
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    const user = await User.findById(decoded.userId);
+
+    if (!user || user.refreshToken !== refreshToken) {
+      const error = new Error("Invalid refresh token");
+      error.statusCode = 403;
+      return next(error);
+    }
+
+    // 🔐 Remove refresh token from DB
+    user.refreshToken = null;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+module.exports = { signup,login, refreshAccessToken,logout };
