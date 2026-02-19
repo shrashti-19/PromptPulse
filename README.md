@@ -91,8 +91,8 @@ This project emphasizes **backend engineering**, **system design**, and **safe A
 | Pagination                    | ✅     |
 | AI Summarization              | ⏳     |
 | AI Q&A (RAG)                  | ⏳     |
-| Rate Limiting                 | ⏳     |
-| Error Handling Middleware     | ⏳     |
+| Rate Limiting                 | ✅     |
+| Error Handling Middleware     | ✅     |
 
 ---
 

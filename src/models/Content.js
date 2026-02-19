@@ -42,4 +42,9 @@ const contentSchema = new mongoose.Schema(
   }
 );
 
+//indexing
+
+contentSchema.index({ userId: 1, isDeleted: 1 });
+contentSchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model("Content", contentSchema);
