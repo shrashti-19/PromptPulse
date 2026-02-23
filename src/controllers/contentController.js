@@ -131,7 +131,11 @@ const softDeleteContent = async (req, res,next) => {
       return res.status(404).json({ message: "Content not found" });
     }
 
-    res.status(200).json({ message: "Content deleted successfully" });
+    // res.status(200).json({ message: "Content deleted successfully" });
+    res.status(200).json({
+     success: true,
+     message: "Content deleted successfully",
+    });
   } catch (error) {
     next(error);
   }
