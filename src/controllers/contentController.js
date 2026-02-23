@@ -97,7 +97,12 @@ const getMyContent = async (req, res, next) => {
       .skip(skip)
       .limit(parseInt(limit));
 
-    res.status(200).json(content);
+    // res.status(200).json(content);
+    res.status(200).json({
+       success: true,
+       message: "Content fetched successfully",
+       data: content,
+    });
   } catch (error) {
     next(error);
   }
