@@ -18,10 +18,15 @@ const createContent = async (req, res, next) => {
     });
 
     // 3. Send response
-    res.status(201).json({
-      message: "Content created successfully",
-      contentId: content._id,
-    });
+    // res.status(201).json({
+    //   message: "Content created successfully",
+    //   contentId: content._id,
+    // });
+    res.status(200).json({
+      success: true,
+      message: "Content fetched successfully",
+      data: content,
+     });
   } catch (error) {
     next(error);
   }
