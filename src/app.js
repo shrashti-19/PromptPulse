@@ -20,4 +20,13 @@ app.use("/api/ai", aiRoutes);
 
 app.use(errorMiddleware);
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is running",
+    timestamp: new Date(),
+    uptime: process.uptime(),
+  });
+});
+
 module.exports = app;
