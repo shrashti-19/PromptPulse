@@ -89,10 +89,7 @@ const getMyContent = async (req, res, next) => {
     }
 
     if (search) {
-      query.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { body: { $regex: search, $options: "i" } },
-      ];
+     query.$text = { $search: search };
     }
 
     const skip = (page - 1) * limit;
