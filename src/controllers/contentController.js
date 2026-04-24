@@ -163,3 +163,9 @@ const updateContent = async (req, res,next) => {
   }
 };
 
+module.exports = {
+  createContent,
+  getMyContent,
+  softDeleteContent,
+  updateContent,
+};

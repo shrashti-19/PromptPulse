@@ -33,4 +33,16 @@ const summarizeContent = async (req, res, next) => {
   }
 };
 
-module.exports = { summarizeContent };
+const askQuestion = async (req, res) => {
+  const { question } = req.body;
+
+  res.status(200).json({
+    success: true,
+    message: "AI ask endpoint working",
+    data: { question },
+  });
+};
+
+
+
+module.exports = { summarizeContent, askQuestion };
