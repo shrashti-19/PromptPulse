@@ -33,14 +33,64 @@ const summarizeContent = async (req, res, next) => {
   }
 };
 
-const askQuestion = async (req, res) => {
-  const { question } = req.body;
+const Content = require("../models/Content");
+const chunkText = require("../utils/chunkText");
+const getSimilarity = require("../utils/similarity");
+const { generateAnswer } = require("../services/llmService");
 
-  res.status(200).json({
-    success: true,
-    message: "AI ask endpoint working",
-    data: { question },
-  });
+const askQuestion = async (req, res) => {
+  try {
+    const { question } = req.body;
+
+    const contents = await Content.find({
+      userId: req.user.userId,
+      isDeleted: false,
+    });
+
+    if (!contents.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No content found",
+      });
+    }
+
+    let allChunks = [];
+
+    for (let item of contents) {
+      const text = `${item.title} ${item.body}`;
+      const chunks = chunkText(text, 50);
+      allChunks.push(...chunks);
+    }
+
+    let bestChunk = "";
+    let bestScore = -1;
+
+    for (let chunk of allChunks) {
+      const score = getSimilarity(question, chunk);
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestChunk = chunk;
+      }
+    }
+
+    const answer = generateAnswer(bestChunk, question);
+
+    res.status(200).json({
+      success: true,
+      message: "Answer generated",
+      data: {
+        question,
+        contextUsed: bestChunk,
+        answer,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 
