@@ -33,7 +33,7 @@ const summarizeContent = async (req, res, next) => {
   }
 };
 
-const Content = require("../models/Content");
+//const Content = require("../models/Content");
 const chunkText = require("../utils/chunkText");
 const getSimilarity = require("../utils/similarity");
 const { generateAnswer } = require("../services/llmService");
